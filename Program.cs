@@ -52,38 +52,43 @@ namespace BitcoinTrackerC_
             {
                 HttpResponseMessage resp = await client.GetAsync(url);
 
-                if (resp.IsSuccessStatusCode) {
-                    string jsonData = await resp.Content.ReadAsStringAsync();
-                    BitcoinTracker? coin = JsonSerializer.Deserialize<BitcoinTracker>(jsonData);
-
-                    if (coin != null && coin.BPI != null)
-                    {
-                        
-                        bitPrice = (decimal)coin.BPI.USD.rate_float * quantity;
-                        decimal? percentageChange = null;
-
-                        if (prevPrice != null) percentageChange = Math.Round(((bitPrice - prevPrice.Value) / prevPrice.Value) * 100, 5);
-
-                        if(prevPrice == null || bitPrice != prevPrice)
-                        {
-                            Console.Write($"Current bitcoin price for {quantity} {(quantity == 1 ? "coin" : "coins")}: ");
-
-                            if (prevPrice > bitPrice) Console.ForegroundColor = ConsoleColor.Red;
-                            else if (prevPrice < bitPrice) Console.ForegroundColor = ConsoleColor.Green;
-
-                            Console.Write($"{bitPrice:C}");
-
-                            if (percentageChange.HasValue) Console.WriteLine($" ({percentageChange.Value:+0.00000;-0.00000}%)");
-                            else Console.WriteLine();
-                            Console.ResetColor();
-
-
-                            prevPrice = bitPrice;
-                        }
-                    }
-                    else Console.WriteLine("Error parsing data...");
+                if(!resp.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Error parsing data... Please try again.");
+                    return;
                 }
-                else Console.WriteLine("Error parsing data... Please try again.");
+ 
+                string jsonData = await resp.Content.ReadAsStringAsync();
+                BitcoinTracker? coin = JsonSerializer.Deserialize<BitcoinTracker>(jsonData);
+
+                if (coin is null && coin?.BPI is null)
+                {
+                    Console.WriteLine("Error parsing data...");
+                    return;
+                }
+   
+                bitPrice = (decimal)coin.BPI.USD.rate_float * quantity;
+                decimal? percentageChange = null;
+
+                if (prevPrice != null) percentageChange = Math.Round(((bitPrice - prevPrice.Value) / prevPrice.Value) * 100, 5);
+
+                if(prevPrice == null || bitPrice != prevPrice)
+                {
+                    Console.Write($"Current bitcoin price for {quantity} {(quantity == 1 ? "coin" : "coins")}: ");
+
+                    if (prevPrice > bitPrice) Console.ForegroundColor = ConsoleColor.Red;
+                    else if (prevPrice < bitPrice) Console.ForegroundColor = ConsoleColor.Green;
+
+                    Console.Write($"{bitPrice:C}");
+
+                    if (percentageChange.HasValue) Console.WriteLine($" ({percentageChange.Value:+0.00000;-0.00000}%)");
+                    else Console.WriteLine();
+                    Console.ResetColor();
+
+
+                    prevPrice = bitPrice;
+                }
+
             }
             catch (Exception e)
             {
