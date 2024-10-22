@@ -17,7 +17,16 @@ namespace BitcoinTrackerC_
                     Console.WriteLine("Exiting application. Thank you!");
                     break;
                 }
-                await GetBitcoinPrice(quantity);
+                try
+                {
+                    await GetBitcoinPrice(quantity);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error has occurred: {ex.Message}. Exiting the loop.");
+                    break;
+                }
+
                 await Task.Delay(1000);
             }
         }
@@ -54,8 +63,8 @@ namespace BitcoinTrackerC_
 
                 if(!resp.IsSuccessStatusCode)
                 {
-                    Console.WriteLine("Error parsing data... Please try again.");
-                    return;
+                    Console.WriteLine($"Error parsing data... Please try again. Status Code {resp.StatusCode}");
+                    throw new HttpRequestException($"HTTP Request failed with status code: {resp.StatusCode}");
                 }
  
                 string jsonData = await resp.Content.ReadAsStringAsync();
@@ -63,7 +72,7 @@ namespace BitcoinTrackerC_
 
                 if (coin is null && coin?.BPI is null)
                 {
-                    Console.WriteLine("Error parsing data...");
+                    Console.WriteLine("Error parsing data... Coin is null or Coin BPI is null");
                     return;
                 }
    
@@ -90,9 +99,13 @@ namespace BitcoinTrackerC_
                 }
 
             }
-            catch (Exception e)
+            catch (HttpRequestException)
             {
-                Console.WriteLine(e);
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
