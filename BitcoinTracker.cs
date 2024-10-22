@@ -10,6 +10,6 @@ namespace BitcoinTrackerC_
     internal class BitcoinTracker
     {
         [JsonPropertyName("bpi")]
-        public BPI BPI {  get; set; }
+        public BPI? BPI {  get; set; }
     }
 }
