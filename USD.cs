@@ -5,11 +5,11 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BitcoinTrackerC_
+namespace BitcoinTrackerCSharp
 {
     internal class USD
     {
         [JsonPropertyName("rate_float")]
-        public decimal? rate_float {  get; set; }
+        public decimal? rate_float { get; set; }
     }
 }

@@ -5,11 +5,11 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BitcoinTrackerC_
+namespace BitcoinTrackerCSharp
 {
     internal class BitcoinTracker
     {
         [JsonPropertyName("bpi")]
-        public BPI? BPI {  get; set; }
+        public BPI? BPI { get; set; }
     }
 }
