@@ -21,9 +21,14 @@ namespace BitcoinTrackerC_
                 {
                     await GetBitcoinPrice(quantity);
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
                     Console.WriteLine($"An error has occurred: {ex.Message}. Exiting the loop.");
+                    break;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("An error has occurred...");
                     break;
                 }
 
