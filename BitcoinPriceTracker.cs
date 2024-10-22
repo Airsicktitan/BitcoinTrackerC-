@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -66,12 +67,12 @@ namespace BitcoinTrackerCSharp
                 throw new HttpRequestException($"HTTP Request failed with status code: {resp.StatusCode}");
             }
 
-            string jsonData = await resp.Content.ReadAsStringAsync();
+            //string jsonData = await resp.Content.ReadAsStringAsync();
             BitcoinTracker? coin;
 
             try
             {
-                coin = JsonSerializer.Deserialize<BitcoinTracker>(jsonData);
+                coin = await resp.Content.ReadFromJsonAsync<BitcoinTracker>();
             }
             catch (JsonException ex)
             {
