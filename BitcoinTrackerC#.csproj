@@ -6,6 +6,8 @@
     <RootNamespace>BitcoinTrackerCSharp</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;BitcoinPriceTracker</Configurations>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
 </Project>
